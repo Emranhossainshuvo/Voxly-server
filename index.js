@@ -47,6 +47,12 @@ async function run() {
       res.send(result); 
     })
 
+    // getting surveys from the database
+    app.get('/surveys', async(req, res) => {
+      const result = await surveyCollection.find().toArray(); 
+      res.send(result); 
+    })
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
