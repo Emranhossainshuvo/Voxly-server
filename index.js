@@ -26,12 +26,11 @@ async function run() {
     await client.connect();
 
     const userCollection = client.db("voxlyDB").collection("users");
+    const surveyCollection = client.db("voxlyDB").collection("surveys");
 
     // send users to database
     app.post("/users", async (req, res) => {
       const user = req.body;
-      // insert email if user doesnt exists:
-      // you can do this many ways (1. email unique, 2. upsert 3. simple checking)
       const query = { email: user.email };
       const existingUser = await userCollection.findOne(query);
       if (existingUser) {
@@ -40,6 +39,13 @@ async function run() {
       const result = await userCollection.insertOne(user);
       res.send(result);
     });
+
+    // add surveys to mongodb
+    app.post('/surveys', async(req, res) => {
+      const survey = req.body; 
+      const result = await surveyCollection.insertOne(survey); 
+      res.send(result); 
+    })
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
