@@ -58,6 +58,20 @@ async function run() {
       res.send(result); 
     })
 
+    // api for load a specific survey
+    app.get('/surveys/:id', async(req, res) => {
+      const id = req.params.id; 
+      const query = {_id: new ObjectId(id)}; 
+      const result = await surveyCollection.findOne(query); 
+      // console.log(result)
+      if (result) {
+        res.send(result);
+      } else {
+        res.status(404).send('Survey not found');
+      }
+      // res.send(result)
+    })
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
